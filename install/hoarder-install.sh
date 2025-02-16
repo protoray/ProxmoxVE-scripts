@@ -93,11 +93,11 @@ BROWSER_WEB_URL="http://127.0.0.1:9222"
 # OPENAI_API_KEY="<API_KEY>"
 
 # If you're planning to use ollama for tagging, uncomment the following lines:
-# OLLAMA_BASE_URL="<OLLAMA_ADDR>"
+OLLAMA_BASE_URL="127.0.0.1:11434"
 
 # You can change the models used by uncommenting the following lines, and changing them according to your needs:
-# INFERENCE_TEXT_MODEL="gpt-4o-mini"
-# INFERENCE_IMAGE_MODEL="gpt-4o-mini" 
+INFERENCE_TEXT_MODEL="qwen2.5:0.5b"
+INFERENCE_IMAGE_MODEL="moondream" 
 EOF
 echo "${RELEASE}" >"/opt/${APPLICATION}_version.txt"
 msg_ok "Installed Hoarder"
@@ -171,6 +171,12 @@ EOF
 
 systemctl -q enable --now meilisearch.service hoarder-browser.service hoarder-workers.service hoarder-web.service
 msg_ok "Created Services"
+
+msg_ok "installing ollama"
+curl -fsSL https://ollama.com/install.sh | sh
+msg_info "pulling image and text inference models"
+ollama pull qwen2.5:0.5b
+ollama pull moondream
 
 motd_ssh
 customize
